@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Wash Game for Yadhu - Created by Sujith</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            background-color: #a0e9ff;
+        }
+        #game-area {
+            margin: 20px auto;
+            width: 500px;
+            height: 300px;
+            border: 4px dashed #777;
+            background-color: #f0f0f0;
+        }
+        #car {
+            width: 80%;
+            margin-top: 50px;
+            cursor: pointer;
+        }
+        #tool-box {
+            margin-top: 20px;
+        }
+        .tool {
+            width: 80px;
+            margin: 0 15px;
+            padding: 10px;
+            background-color: white;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .selected {
+            border-color: #007bff;
+            box-shadow: 0 0 10px #007bff;
+        }
+        #reset-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Car Wash Game for Yadhu</h1>
+    <p><em>Created by Sujith</em></p>
+    <p id="instructions">Click the right tool, then click the car!</p>
+
+    <div id="game-area">
+        <img id="car" src="images/muddy-car.png" alt="A muddy car">
+    </div>
+
+    <div id="tool-box">
+        <img id="hose" class="tool" src="images/hose.png" alt="Water hose">
+        <img id="sponge" class="tool" src="images/sponge.png" alt="Soapy sponge">
+    </div>
+    
+    <button id="reset-button" class="hidden">Play Again!</button>
+
+    <audio id="click-sound" src="audio/click.mp3"></audio>
+    <audio id="splash-sound" src="audio/splash.mp3"></audio>
+    <audio id="bubbles-sound" src="audio/bubbles.mp3"></audio>
+    <audio id="sparkle-sound" src="audio/sparkle.mp3"></audio>
+
+    <script>
+        // Get all the visual elements
+        const carImage = document.getElementById('car');
+        const hoseTool = document.getElementById('hose');
+        const spongeTool = document.getElementById('sponge');
+        const instructions = document.getElementById('instructions');
+        const resetButton = document.getElementById('reset-button');
+
+        // Get all the audio elements
+        const clickSound = document.getElementById('click-sound');
+        const splashSound = document.getElementById('splash-sound');
+        const bubblesSound = document.getElementById('bubbles-sound');
+        const sparkleSound = document.getElementById('sparkle-sound');
+
+        // Game state variables
+        let selectedTool = null;
+        let carState = 'muddy'; // Initial state
+
+        // A helper function to reset tool selection
+        function deselectTools() {
+            selectedTool = null;
+            hoseTool.classList.remove('selected');
+            spongeTool.classList.remove('selected');
+        }
+
+        // Event listener for the hose tool
+        hoseTool.addEventListener('click', () => {
+            clickSound.play();
+            selectedTool = 'hose';
+            hoseTool.classList.add('selected');
+            spongeTool.classList.remove('selected');
+        });
+
+        // Event listener for the sponge tool
+        spongeTool.addEventListener('click', () => {
+            clickSound.play();
+            selectedTool = 'sponge';
+            spongeTool.classList.add('selected');
+            hoseTool.classList.remove('selected');
+        });
+
+        // Event listener for clicking the car (UPDATED LOGIC)
+        carImage.addEventListener('click', () => {
+            if (carState === 'muddy' && selectedTool === 'hose') {
+                // Step 1: Rinse the mud off
+                splashSound.play();
+                carState = 'wet';
+                carImage.src = 'images/wet-car.png'; // Use the new image
+                instructions.textContent = 'Good! The mud is gone. Now use the sponge to soap it up.';
+                deselectTools();
+
+            } else if (carState === 'wet' && selectedTool === 'sponge') {
+                // Step 2: Apply soap
+                bubblesSound.play();
+                carState = 'soapy';
+                carImage.src = 'images/soapy-car.png';
+                instructions.textContent = 'Nice and bubbly! Now use the hose to rinse the soap off.';
+                deselectTools();
+
+            } else if (carState === 'soapy' && selectedTool === 'hose') {
+                // Step 3: Final rinse to make it clean
+                splashSound.play();
+                setTimeout(() => { sparkleSound.play(); }, 500); // Sparkle after the splash
+                carState = 'clean';
+                carImage.src = 'images/clean-car.png';
+                instructions.textContent = 'All clean! What a great helper!';
+                deselectTools();
+                resetButton.classList.remove('hidden'); // Show the reset button
+
+            } else {
+                // Handle incorrect actions
+                instructions.textContent = 'Oops! Try a different tool.';
+            }
+        });
+
+        // Event listener for the reset button (no changes needed here)
+        resetButton.addEventListener('click', () => {
+            clickSound.play();
+            carState = 'muddy';
+            deselectTools();
+            carImage.src = 'images/muddy-car.png';
+            instructions.textContent = 'Click the right tool, then click the car!';
+            resetButton.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>

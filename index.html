@@ -3,56 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Car Wash Game for Yadhu - Created by Sujith</title>
+    <title>VroomVille Car Wash - Created by Sujith</title>
     <style>
         body {
             font-family: sans-serif;
             text-align: center;
             background-color: #a0e9ff;
+            margin: 0;
+            padding: 1rem;
+            box-sizing: border-box; /* Ensures padding doesn't add to width */
         }
+
+        h1 {
+            font-size: 2.2em;
+        }
+
+        /* --- Responsive Game Area --- */
         #game-area {
             margin: 20px auto;
-            width: 500px;
+            /* Use max-width for responsiveness */
+            max-width: 500px;
+            width: 90%; 
             height: 300px;
             border: 4px dashed #777;
             background-color: #f0f0f0;
+            /* Add Flexbox to perfectly center the car image */
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
+
         #car {
-            width: 80%;
-            margin-top: 50px;
+            /* Use max-width and max-height to ensure the image fits */
+            max-width: 80%;
+            max-height: 90%;
             cursor: pointer;
         }
+
+        /* --- Flexible Tool Box --- */
         #tool-box {
             margin-top: 20px;
+            /* Use Flexbox to align tools and allow wrapping */
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px; /* Modern way to space items */
         }
+
         .tool {
             width: 80px;
-            margin: 0 15px;
             padding: 10px;
             background-color: white;
             border: 2px solid #ccc;
             border-radius: 10px;
             cursor: pointer;
         }
+
         .selected {
             border-color: #007bff;
             box-shadow: 0 0 10px #007bff;
         }
+
         #reset-button {
             margin-top: 20px;
             padding: 10px 20px;
             font-size: 1.2em;
             cursor: pointer;
         }
+
         .hidden {
             display: none;
+        }
+
+        /* --- Media Query for Mobile Phones (Portrait Mode) --- */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8em; /* Make title smaller on mobile */
+            }
+
+            #game-area {
+                height: 250px; /* Adjust game area height */
+            }
+
+            .tool {
+                width: 70px; /* Make tools slightly smaller */
+            }
         }
     </style>
 </head>
 <body>
 
-    <h1>Car Wash Game for Yadhu</h1>
+    <h1>VroomVille Car Wash</h1>
     <p><em>Created by Sujith</em></p>
+
     <p id="instructions">Click the right tool, then click the car!</p>
 
     <div id="game-area">
@@ -66,10 +109,10 @@
     
     <button id="reset-button" class="hidden">Play Again!</button>
 
-    <audio id="click-sound" src="audio/click.mp3"></audio>
-    <audio id="splash-sound" src="audio/splash.mp3"></audio>
-    <audio id="bubbles-sound" src="audio/bubbles.mp3"></audio>
-    <audio id="sparkle-sound" src="audio/sparkle.mp3"></audio>
+    <audio id="click-sound" src="audio/click.mp3" preload="auto"></audio>
+    <audio id="splash-sound" src="audio/splash.mp3" preload="auto"></audio>
+    <audio id="bubbles-sound" src="audio/bubbles.mp3" preload="auto"></audio>
+    <audio id="sparkle-sound" src="audio/sparkle.mp3" preload="auto"></audio>
 
     <script>
         // Get all the visual elements
